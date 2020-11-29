@@ -1,0 +1,42 @@
+{
+  "name": "tktk",
+  "description": "A convenient automated test re-runner",
+  "version": "0.0.0",
+  "main": "index.js",
+  "bin": {
+    "testy": "index.js"
+  },
+  "scripts": {
+    "lint": "eslint . --fix",
+    "test": "npm run lint"
+  },
+  "author": "Ryan Block <hello@ryanblock.com>",
+  "license": "Apache-2.0",
+  "keywords": [
+    "automation",
+    "cli",
+    "dev tools",
+    "local dev",
+    "test runner",
+    "testing",
+    "tests",
+    "unit tests"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryanblock/tktk.git"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "node-watch": "^0.7.0",
+    "update-notifier": "^5.0.1",
+    "yargs": "^16.1.1"
+  },
+  "devDependencies": {
+    "@ryanblock/eslint-config": "^1.0.0",
+    "eslint": "^7.14.0"
+  },
+  "eslintConfig": {
+    "extends": "@ryanblock/eslint-config"
+  }
+}
