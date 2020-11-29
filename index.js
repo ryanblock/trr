@@ -21,8 +21,6 @@ let {
   watch = process.cwd(),
   verbose = false
 } = opts
-// TODO ↓ remove me! ↓
-console.log(`opts:`, opts)
 if (!run.length) {
   console.error(chalk.red('Error:'), 'Please supply a command to run')
   process.exit(1)
