@@ -26,7 +26,7 @@ if (!run.length) {
   process.exit(1)
 }
 ignore = typeof ignore === 'string' ? [ ignore ] : ignore
-ignore.unshift('node_modules')
+ignore.unshift('node_modules', '.git')
 let name = run.join(' ')
 
 // Announce
@@ -48,6 +48,7 @@ watcher(watch, { recursive: true }, function (event, filename) {
   if (verbose) console.log(`${event.charAt(0).toUpperCase() + event.substr(1)}d: ${filename}`)
 
   function go () {
+    let start = Date.now()
     running = true
     console.log(chalk.bold(`Running:`), name)
 
@@ -66,7 +67,7 @@ watcher(watch, { recursive: true }, function (event, filename) {
       let good = code === 0
       let status = good ? chalk.green.bold('Success!') : chalk.red.bold('Failed :(')
       console.log(status)
-      console.log(`  | ${name} exited ${good ? '' : 'un'}successfully with code ${code}`)
+      console.log(`  | ${name} exited ${good ? '' : 'un'}successfully with code ${code} in ${Date.now() - start}ms`)
 
       if (queue && queued) {
         console.log(`  | Starting queued run`)
