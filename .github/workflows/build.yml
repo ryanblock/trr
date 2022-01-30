@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 10.x, 12.x, 14.x ]
+        node-version: [ 12.x, 14.x, 16.x ]
         os: [ ubuntu-latest ] # later: [ windows-latest, ubuntu-latest, macOS-latest ]
 
     # Go
@@ -24,7 +24,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
 
@@ -46,68 +46,38 @@ jobs:
       env:
         CI: true
 
-  # # ----- Only git tag testing + package publishing beyond this point ----- #
+  # ----- Only git tag testing + package publishing beyond this point ----- #
 
-  # # Publish to package registries
-  # publish:
-  #   # Setup
-  #   needs: build
-  #   if: startsWith(github.ref, 'refs/tags/v')
-  #   runs-on: ubuntu-latest
+  # Publish to package registries
+  publish:
+    # Setup
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
 
-  #   # Go
-  #   steps:
-  #     - name: Check out repo
-  #       uses: actions/checkout@v2
+    # Go
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
 
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 12
-  #         registry-url: https://registry.npmjs.org/
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
 
-  #     - name: Install
-  #       run: npm i
+      - name: Install
+        run: npm i
 
-  #     # Publish to npm
-  #     - name: Publish @RC to npm
-  #       if: contains(github.ref, 'RC')
-  #       run: npm publish --tag RC
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Publish to npm
+      - name: Publish @RC to npm
+        if: contains(github.ref, 'RC')
+        run: npm publish --tag RC
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  #     - name: Publish @latest to npm
-  #       if: contains(github.ref, 'RC') == false #'!contains()'' doesn't work lol
-  #       run: npm publish
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  #     # Set up Node again, this time using GitHub as the publish target
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 12
-  #         registry-url: https://npm.pkg.github.com/
-
-  #     # Publish to GitHub
-  #     - name: Publish @RC to GitHub
-  #       if: contains(github.ref, 'RC')
-  #       run: npm publish --tag RC
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  #     - name: Publish @latest to GitHub
-  #       if: contains(github.ref, 'RC') == false #'!contains()'' doesn't work lol
-  #       run: npm publish
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  #     - name: Notify
-  #       uses: homoluctus/slatify@master
-  #       if: always()
-  #       with:
-  #         type: ${{ job.status }}
-  #         job_name: '*Publish*'
-  #         url: ${{ secrets.SLACK_WEBHOOK }}
-  #         commit: true
-  #         token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish @latest to npm
+        if: contains(github.ref, 'RC') == false #'!contains()'' doesn't work lol
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

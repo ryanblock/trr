@@ -1,10 +1,10 @@
 {
-  "name": "tktk",
+  "name": "trr",
   "description": "A convenient automated test re-runner",
   "version": "0.0.0",
   "main": "index.js",
   "bin": {
-    "testy": "index.js"
+    "trr": "index.js"
   },
   "scripts": {
     "lint": "eslint . --fix",
@@ -24,19 +24,22 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ryanblock/tktk.git"
+    "url": "https://github.com/ryanblock/trr.git"
   },
   "dependencies": {
-    "chalk": "^4.1.0",
-    "node-watch": "^0.7.0",
-    "update-notifier": "^5.0.1",
-    "yargs": "^16.1.1"
+    "chalk": "^4.1.2",
+    "minimist": "^1.2.5",
+    "node-watch": "^0.7.3",
+    "update-notifier": "^5.1.0"
   },
   "devDependencies": {
     "@ryanblock/eslint-config": "^1.0.0",
-    "eslint": "^7.14.0"
+    "eslint": "^8.8.0"
   },
   "eslintConfig": {
-    "extends": "@ryanblock/eslint-config"
+    "extends": "@ryanblock/eslint-config",
+    "parserOptions": {
+      "ecmaVersion": 2020
+    }
   }
 }
