@@ -26,6 +26,9 @@
     "type": "git",
     "url": "https://github.com/ryanblock/trr.git"
   },
+  "files": [
+    "index.js"
+  ],
   "dependencies": {
     "chalk": "^4.1.2",
     "minimist": "^1.2.5",
