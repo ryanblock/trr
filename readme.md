@@ -1,6 +1,8 @@
 # `trr`
 ## A convenient automated test re-runner
 
+<img src="https://user-images.githubusercontent.com/200964/151686284-f3f44858-0281-4f28-bbe1-e1f554931547.gif" width=640>
+
 Who wants to save a change to a module or a test, then swap back to your terminal and manually invoke a test run? Ew.
 
 Iterate faster by letting your tests automatically re-run themselves whenever you make changes to your local project.
