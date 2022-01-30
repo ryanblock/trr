@@ -1,4 +1,4 @@
-# TKTK
+# trr
 ## A convenient automated test re-runner
 
 Who wants to save a change to a module or a test, then swap back to your terminal and manually invoke a test run? Ew.
@@ -10,16 +10,16 @@ Kind of like `jest --watch`, except for any test harness, script, or command.
 
 ### Install
 
-`npm i -g {TKTK}`
+`npm i -g trr`
 
 
 ### Usage
 
-TKTK is a CLI aid to your existing tests and scripts, automatically re-running a given command when a (qualifying) file changes in your project.
+trr is a CLI aid to your existing tests and scripts, automatically re-running a given command when a (qualifying) file changes in your project.
 
 While your tests are running, filesystem changes will be ignored until the current run is complete, meaning your tests can include filesystem mutations without recursively calling itself.
 
-For example: say you normally run your tests with `npm test`. From your project directory, just run: `TKTK npm test` to start the watcher.
+For example: say you normally run your tests with `npm test`. From your project directory, just run: `trr npm test` to start the watcher.
 
 
 #### Flags
@@ -32,20 +32,20 @@ For example: say you normally run your tests with `npm test`. From your project 
 
 #### Use it for more than just tests
 
-While TKTK was designed to re-run test suites, it will accept and run any command. Use it to automatically lint your codebase, run spellchecks on docs, or anything else you'd like to run on repeat while you're working on your project.
+While trr was designed to re-run test suites, it will accept and run any command. Use it to automatically lint your codebase, run spellchecks on docs, or anything else you'd like to run on repeat while you're working on your project.
 
 
 #### Examples
 
 - Watch only your `tests/` dir:
-  - `TKTK npm test --watch tests`
+  - `trr npm test --watch tests`
 - Don't re-run tests when you change `tests/` dir:
-  - `TKTK npm test --ignore tests`
+  - `trr npm test --ignore tests`
 - Allow changes to queue up your next test run while the current run is still going:
-  - `TKTK npm test --queue`
+  - `trr npm test --queue`
 - Continually lint your `src/` dir:
-  - `TKTK npm run lint --watch src`
+  - `trr npm run lint --watch src`
 - Spellcheck your docs:
-  - `TKTK ./spellcheck --watch docs`
+  - `trr ./spellcheck --watch docs`
 - Chain together multiple commands (using quotes)
-  - `TKTK 'npm run lint && ./spellcheck'`
+  - `trr 'npm run lint && ./spellcheck'`
