@@ -34,7 +34,7 @@ The following preferences are available by creating a `~/.trr.json` file with th
 - `runOnStart` (bool, default: false) run the specified script immediately upon starting instead of waiting for a watcher event
 - `shortcuts` - **experimental!** (object) - add shortcut scripts with variable replacement based on positional CLI args
   - Example: add `"shortcuts": { "run": "echo $0 $1" }`, then `trr run hello world` will print `hello world` to stdout on every file change
-  - On *nix systems, you can also include pipes; for example, execute a single TAP-compatible Node test and pipe to a reporter like so: `"shortcuts": { "node $0 | tap-spec" }`
+  - On *nix systems, you can also include pipes; for example, execute a single TAP-compatible Node test and pipe to a reporter like so: `"shortcuts": { "run": "node $0 | tap-spec" }`
 - `watch` - (string, default: current directory) - specify a (sub)directory to watch
 - `verbose` - (bool, default: false) enable verbose logging
 
