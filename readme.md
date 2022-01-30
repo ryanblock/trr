@@ -1,4 +1,4 @@
-# `trr`
+# [`trr`](https://www.npmjs.com/package/trr)
 ## A convenient automated test re-runner
 
 <img src="https://user-images.githubusercontent.com/200964/151686284-f3f44858-0281-4f28-bbe1-e1f554931547.gif" width=640>
