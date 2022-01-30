@@ -10,7 +10,7 @@ let update = require('update-notifier')
 let pkg = require(join(__dirname, 'package.json'))
 
 let prefsPath = join(homedir(), '.trr.json')
-let prefs
+let prefs = {}
 if (existsSync(prefsPath)) prefs = JSON.parse(readFileSync(prefsPath))
 
 // Update
@@ -18,23 +18,34 @@ let boxenOpts = { padding: 1, margin: 1, align: 'center', borderColor: 'green', 
 update({ pkg, shouldNotifyInNpmScript: true }).notify({ boxenOpts })
 
 // Args
-let opts = minimist(process.argv.slice(2))
-let {
-  _: run,
-  ignore = [],
-  queue = false,
-  watch = process.cwd(),
-  verbose = false,
-} = opts
+let alias = {
+  ignore:     [ 'i' ],
+  queue:      [ 'q' ],
+  runOnStart: [ 'r' ],
+  watch:      [ 'w' ],
+  verbose:    [ 'v' ],
+}
+let boolean = [ 'queue', 'runOnStart', 'verbose' ]
+let opts = minimist(process.argv.slice(2), { alias, boolean })
+
+let { _: run } = opts
+let ignore = opts.ignore || prefs.ignore || []
+let queue = opts.queue || prefs.queue
+let watch = opts.watch || prefs.watch || process.cwd()
+let verbose = opts.verbose || prefs.verbose || false
+
 if (!run.length) {
   console.error(chalk.red('Error:'), 'Please supply a command to run')
   process.exit(1)
 }
+
+// Set ignore list
 ignore = typeof ignore === 'string' ? [ ignore ] : ignore
 ignore.unshift('node_modules', '.git')
-if (prefs.ignore) ignore = ignore.concat(prefs.ignore)
+
+// Use specified shortcuts in ~/.trr.json
 let input
-if (prefs?.shortcuts[run[0]]) {
+if (prefs.shortcuts[run[0]]) {
   input = prefs.shortcuts[run[0]]
   if (run.length > 1) run.slice(1).forEach((arg, i) => {
     input = input.replace(`$${i}`, arg)
@@ -51,8 +62,8 @@ if (verbose) console.log(chalk.dim(`Ignoring: ${ignore.join(', ')}`))
 let running = false
 let queued = false
 
+// Start
 if (prefs.runOnStart) go()
-
 watcher(watch, { recursive: true }, function (event, filename) {
   filename = filename.replace(watch, '').substr(1)
   if (ignore.some(i => filename.includes(i))) {
@@ -67,6 +78,7 @@ watcher(watch, { recursive: true }, function (event, filename) {
 })
 
 function go (filename) {
+  console.log() // Break up the runs a bit
   let start = Date.now()
   running = true
   console.log(chalk.bold(`Running:`), input)
@@ -98,14 +110,12 @@ function go (filename) {
     let good = code === 0
     let status = good ? chalk.green.bold('Success!') : chalk.red.bold('Failed :(')
     console.log(status)
-    console.log(`  | ${running} exited ${good ? '' : 'un'}successfully with code ${code} in ${Date.now() - start}ms`)
+    console.log(`  | '${input}' exited ${good ? '' : 'un'}successfully with code ${code} in ${Date.now() - start}ms`)
 
     if (queue && queued) {
       console.log(`  | Starting queued run`)
       queued = false
       go()
     }
-
-    console.log() // Break up the runs a bit
   })
 }
