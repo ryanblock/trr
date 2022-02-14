@@ -29,6 +29,9 @@
   "files": [
     "index.js"
   ],
+  "engines": {
+    "node": ">=12"
+  },
   "dependencies": {
     "chalk": "^4.1.2",
     "minimist": "^1.2.5",

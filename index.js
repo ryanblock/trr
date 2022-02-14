@@ -45,7 +45,7 @@ ignore.unshift('node_modules', '.git')
 
 // Use specified shortcuts in ~/.trr.json
 let input
-if (prefs.shortcuts[run[0]]) {
+if (prefs.shortcuts && prefs.shortcuts[run[0]]) {
   input = prefs.shortcuts[run[0]]
   if (run.length > 1) run.slice(1).forEach((arg, i) => {
     input = input.replace(`$${i}`, arg)
