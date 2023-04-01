@@ -5,8 +5,8 @@ let { join } = require('path')
 let { spawn } = require('child_process')
 let watcher = require('node-watch')
 let minimist = require('minimist')
-let chalk = require('chalk')
-let update = require('update-notifier')
+let c = require('picocolors')
+let update = require('update-notifier-cjs')
 let pkg = require(join(__dirname, 'package.json'))
 
 let prefsPath = join(homedir(), '.trr.json')
@@ -35,7 +35,7 @@ let watch = opts.watch || prefs.watch || process.cwd()
 let verbose = opts.verbose || prefs.verbose || false
 
 if (!run.length) {
-  console.error(chalk.red('Error:'), 'Please supply a command to run')
+  console.error(c.red('Error:'), 'Please supply a command to run')
   process.exit(1)
 }
 
@@ -54,9 +54,9 @@ if (prefs.shortcuts && prefs.shortcuts[run[0]]) {
 else input = run.join(' ')
 
 // Announce
-console.log(chalk.bold(`Watching:`), watch)
-console.log(chalk.bold(`Will run:`), input)
-if (verbose) console.log(chalk.dim(`Ignoring: ${ignore.join(', ')}`))
+console.log(c.bold(`Watching:`), watch)
+console.log(c.bold(`Will run:`), input)
+if (verbose) console.log(c.dim(`Ignoring: ${ignore.join(', ')}`))
 
 // Current status
 let running = false
@@ -67,7 +67,7 @@ if (prefs.runOnStart) go()
 watcher(watch, { recursive: true }, function (event, filename) {
   filename = filename.replace(watch, '').substr(1)
   if (ignore.some(i => filename.includes(i))) {
-    if (!filename.includes('node_modules') && verbose) console.log(chalk.dim(`Ignored: ${filename}`))
+    if (!filename.includes('node_modules') && verbose) console.log(c.dim(`Ignored: ${filename}`))
     return
   }
 
@@ -81,7 +81,7 @@ function go (filename) {
   console.log() // Break up the runs a bit
   let start = Date.now()
   running = true
-  console.log(chalk.bold(`Running:`), input)
+  console.log(c.bold(`Running:`), input)
 
   let cmd, args
   // The inclusion of pipe shell syntax necessitates running the command as a bash abstraction
@@ -108,7 +108,7 @@ function go (filename) {
     running = false
 
     let good = code === 0
-    let status = good ? chalk.green.bold('Success!') : chalk.red.bold('Failed :(')
+    let status = good ? c.green.bold('Success!') : c.red.bold('Failed :(')
     console.log(status)
     console.log(`  | '${input}' exited ${good ? '' : 'un'}successfully with code ${code} in ${Date.now() - start}ms`)
 
