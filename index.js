@@ -22,6 +22,7 @@ let alias = {
   ignore:     [ 'i' ],
   queue:      [ 'q' ],
   runOnStart: [ 'r' ],
+  timeout:    [ 't' ],
   watch:      [ 'w' ],
   verbose:    [ 'v' ],
 }
@@ -31,6 +32,7 @@ let opts = minimist(process.argv.slice(2), { alias, boolean })
 let { _: run } = opts
 let ignore = opts.ignore || prefs.ignore || []
 let queue = opts.queue || prefs.queue
+let timeout = opts.timeout || prefs.timeout || 5
 let watch = opts.watch || prefs.watch || process.cwd()
 let verbose = opts.verbose || prefs.verbose || false
 
@@ -80,6 +82,9 @@ watcher(watch, { recursive: true }, function (event, filename) {
 function go (filename) {
   console.log() // Break up the runs a bit
   let start = Date.now()
+  let to = timeout * 1000
+  let lastPrinted
+
   running = true
   console.log(c.bold(`Running:`), input)
 
@@ -99,21 +104,43 @@ function go (filename) {
   }
   let options = {
     cwd: process.cwd(),
-    stdio: 'inherit',
     shell: true
   }
   let result = spawn(cmd, args, options)
 
+  result.stdout.on('data', data => {
+    lastPrinted = Date.now()
+    process.stdout.write(data.toString())
+  })
+  result.stderr.on('data', data => {
+    lastPrinted = Date.now()
+    process.stderr.write(data.toString())
+  })
+  result.on('error', err => {
+    console.log('Spawn error:', err)
+    process.exit(1)
+  })
+
+  // Begin inactivity checks
+  let interval = setInterval(() => {
+    let timedOut = (Date.now() - lastPrinted) >= to
+    if (running && timedOut) {
+      console.log(c.dim(`Terminated run due to inactivity for ${to}ms`))
+      result.kill('SIGINT')
+    }
+  }, 100)
+
   result.on('close', code => {
     running = false
+    clearInterval(interval)
 
     let good = code === 0
     let status = good ? c.green.bold('Success!') : c.red.bold('Failed :(')
     console.log(status)
-    console.log(`  | '${input}' exited ${good ? '' : 'un'}successfully with code ${code} in ${Date.now() - start}ms`)
+    console.log(c.dim(`  | '${input}' exited ${good ? '' : 'un'}successfully with code ${code} in ${Date.now() - start}ms`))
 
     if (queue && queued) {
-      console.log(`  | Starting queued run`)
+      console.log(c.dim(`  | Starting queued run`))
       queued = false
       go()
     }
