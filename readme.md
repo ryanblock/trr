@@ -28,25 +28,27 @@ For example: say you normally run your tests with `npm test`. From your project 
 
 The following preferences are available by creating a `~/.trr.json` file with the following optional properties:
 
-- `ignore` - (array of strings) ignore each match; `trr` includes `node_modules` + `.git` by default
+- `ignore` (array of strings) ignore each match; `trr` includes `node_modules` + `.git` by default
   - Ignore uses a simple string match, so ignoring `foo` will ignore `some/foolish/project`
   - To ignore multiple things, use the tag multiple times; example: `--ignore stuff --ignore
 - `runOnStart` (bool, default: false) run the specified script immediately upon starting instead of waiting for a watcher event
-- `shortcuts` - **experimental!** (object) - add shortcut scripts with variable replacement based on positional CLI args
+- `shortcuts` **experimental!** (object) add shortcut scripts with variable replacement based on positional CLI args
   - Example: add `"shortcuts": { "run": "echo $0 $1" }`, then `trr run hello world` will print `hello world` to stdout on every file change
   - On *nix systems, you can also include pipes; for example, execute a single TAP-compatible Node test and pipe to a reporter like so: `"shortcuts": { "run": "node $0 | tap-spec" }`
-- `watch` - (string, default: current directory) - specify a (sub)directory to watch
-- `verbose` - (bool, default: false) enable verbose logging
+- `timeout` (number, default: 3) during a run, the number of seconds to wait for console output before automatically canceling
+- `watch` (string, default: current directory) specify a (sub)directory to watch
+- `verbose` (bool, default: false) enable verbose logging
 
 The following CLI flags are also available:
 
-- `--ignore`, `-i` - ignore each match; `trr` includes `node_modules` + `.git` by default
+- `--ignore`, `-i` (string) ignore each match; `trr` includes `node_modules` + `.git` by default
   - Ignore uses a simple string match, so ignoring `foo` will ignore `some/foolish/project`
   - To ignore multiple things, use the tag multiple times; example: `--ignore stuff --ignore more-stuff`
-- `--queue`, `-q` - (default: disabled) queue up the next run if a matching filesystem change occurs during the current run; can only enqueue one run at a time
-- `--runOnStart`, `-r` - (default: false) run the script immediately upon starting instead of waiting for a watcher event
-- `--watch`, `-w` - (default: current directory) - specify a (sub)directory to watch
-- `--verbose`, `-v` - (default: disabled) enable verbose logging
+- `--queue`, `-q` (default: disabled) queue up the next run if a matching filesystem change occurs during the current run; can only enqueue one run at a time
+- `--runOnStart`, `-r` (default: false) run the script immediately upon starting instead of waiting for a watcher event
+- `--timeout`, `-t` (number, default: 3) during a run, the number of seconds to wait for console output before automatically canceling
+- `--watch`, `-w` (default: current directory) specify a (sub)directory to watch
+- `--verbose`, `-v` (default: disabled) enable verbose logging
 
 > Note: Where a setting conflicts, the CLI arg will have priority over the preferences file.
 
