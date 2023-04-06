@@ -1,7 +1,7 @@
 {
   "name": "trr",
   "description": "A convenient automated test re-runner",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "bin": {
     "trr": "index.js"
