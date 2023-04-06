@@ -135,7 +135,7 @@ function go (filename) {
     clearInterval(interval)
 
     let good = code === 0
-    let status = good ? c.green.bold('Success!') : c.red.bold('Failed :(')
+    let status = good ? c.green(c.bold('Success!')) : c.red(c.bold('Failed :('))
     console.log(status)
     console.log(c.dim(`  | '${input}' exited ${good ? '' : 'un'}successfully with code ${code} in ${Date.now() - start}ms`))
 
