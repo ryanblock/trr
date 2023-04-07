@@ -104,7 +104,11 @@ function go (filename) {
   }
   let options = {
     cwd: process.cwd(),
-    shell: true
+    shell: true,
+    env: {
+      FORCE_COLOR: true,
+      ...process.env,
+    },
   }
   let result = spawn(cmd, args, options)
 
