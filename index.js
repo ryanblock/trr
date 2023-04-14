@@ -96,6 +96,7 @@ function go (filename) {
   }
   else {
     let bits = input.split(' ')
+    cmd = bits[0]
     args = bits.slice(1)
     args = args.map(a => {
       if (a === '{last}') a = filename
