@@ -130,6 +130,8 @@ function go (filename) {
   let interval = setInterval(() => {
     let timedOut = (Date.now() - lastPrinted) >= to
     if (running && timedOut) {
+      running = false
+      clearInterval(interval)
       console.log(c.dim(`Terminated run due to inactivity for ${to}ms`))
       result.kill('SIGINT')
     }
